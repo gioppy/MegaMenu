@@ -1,7 +1,9 @@
 (function($) {
 	var setup = {
 	  openMenu:function(target, settings){
-  	  $(target).click(function(){
+  	  $(target).click(function(e){
+  	    e.preventDefault();
+  	    e.stopPropagation();
         var $this = $(this);
         var thisTrigger = $('a'+settings.trigger).index(this);
         var thisMenu = $(settings.menu+':eq('+thisTrigger+')');
@@ -10,7 +12,14 @@
         if(thisMenu.is(":not(:visible)")){
           thisMenu.css('z-index', 201).slideDown('slow', settings.open).parent().addClass("active");
         }
-        return false;
+      });
+      
+      $(document).click(function(e){
+        var menu = $(settings.menu);
+        if(menu.has(e.target).length == 0){
+          menu.parent().removeClass("active");
+          menu.css('z-index', 101).slideUp('slow');
+        }
       });
 	  }
 	},
